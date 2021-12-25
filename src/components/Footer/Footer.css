@@ -1,0 +1,14 @@
+.nav{
+    background-color: #FAFAFA;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    box-shadow: 0 2px 6px 0 rgba(0,0,0,0.19);
+}
+
+.nav-link{
+    color: black;
+}
+
+.nav-link:hover{
+    color: #4F5665;
+}

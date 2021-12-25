@@ -1,0 +1,34 @@
+.card{
+    margin: 20px 20px 30px 20px;
+    padding: 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19);
+}
+
+.card img{
+    padding: 5px;
+}
+
+.card-title{
+    color: #4F5665;
+}
+
+.card-text{
+    color: #4F5665;
+}
+
+.card-footer{
+    color: #4F5665;
+}
+
+.btn-primary{
+    background-color: #C4C4C4;
+    border-color: #C4C4C4;
+    color: #444444;
+}
+
+.btn-primary:hover{
+    background-color: #FFD200;
+    border-color: #FFD200;
+    color: white;
+}

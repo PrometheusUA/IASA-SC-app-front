@@ -1,0 +1,32 @@
+.navbar-light{
+    background-color: #FAFAFA;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    box-shadow: 0 2px 6px 0 rgba(0,0,0,0.19);
+}
+
+.main-header-nav{
+    color: black;
+}
+
+.main-header-light .navbar-toggler {
+    color: black;
+    border-color: black;
+}
+
+.navbar-light .navbar-toggler{
+    color: black;
+    border-color: black;
+}
+
+.navbar-toggler:focus{
+    box-shadow: 0 0 0 1;
+}
+
+.navbar-light .navbar-nav .nav-link{
+    color: black;
+}
+
+.navbar-collapse{
+    text-align: right;
+}

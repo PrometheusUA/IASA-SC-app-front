@@ -1,25 +1,35 @@
-import logo from './logo.svg';
+import React from 'react';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+import MainPage from './components/MainPage/MainPage';
+import LoginPage from './components/LoginPage/LoginPage';
+import ComplaintPage from './components/ComplaintPage/ComplaintPage';
+import RegisterPage from './components/RegisterPage/RegisterPage';
+import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+class App extends React.Component {
+  render() {
+    return (
+      <Router>
+        <Header />
+        <main className='default'>
+          <Routes>
+            <Route path="/" element={<MainPage />}/>
+            <Route path="/news" element={<MainPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/complaint" element={<ComplaintPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+          </Routes>
+        </main>
+        <Footer />
+      </Router>
+    );
+  }
 }
 
 export default App;
