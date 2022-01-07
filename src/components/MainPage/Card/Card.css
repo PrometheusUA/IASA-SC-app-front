@@ -32,3 +32,9 @@
     border-color: #FFD200;
     color: white;
 }
+
+.btn-primary:disabled{
+    background-color: #444444;
+    border-color: #444444;
+    color: #C4C4C4;
+}

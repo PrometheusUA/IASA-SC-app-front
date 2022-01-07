@@ -8,7 +8,7 @@ function Header(props){
     return (
         <Navbar collapseOnSelect expand="md" variant="light"> {/*bsPrefix="main-header">*/}
             <Container>
-                <Navbar.Brand href="http://localhost:3000"><img src='https://i.imgur.com/eyS5sY8.png'/></Navbar.Brand>
+                <Navbar.Brand href="http://localhost:3000"><img src='https://i.imgur.com/eyS5sY8.png' alt="IASA Student Council"/></Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto"></Nav>
