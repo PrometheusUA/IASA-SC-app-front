@@ -7,6 +7,7 @@ import ComplaintPage from './components/ComplaintPage/ComplaintPage';
 import RegisterPage from './components/RegisterPage/RegisterPage';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
+import VideoPage from './components/VideoPage/VideoPage'
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import './App.css';
@@ -24,6 +25,7 @@ class App extends React.Component {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/complaint" element={<ComplaintPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/video" element={<VideoPage />} />
           </Routes>
         </main>
         <Footer />

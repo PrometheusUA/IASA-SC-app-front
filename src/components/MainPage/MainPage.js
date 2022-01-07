@@ -41,45 +41,6 @@ class MainPage extends React.Component {
         this.fetchNewsHandler(1);
     }
 
-    // const news=[
-    //   {
-    //     id: 1,
-    //     title: "Гарні новини, друзі5!",
-    //     imageLink: "https://icf.listex.info/TMLogo/200x200/2acd590d-6b27d6e9.jpg",
-    //     text: "Сталося диво! Всі викладачі дали шари!",
-    //     link: "https://t.me/IASA_Student_Council/1446",
-    //     createdAt: new Date(2021, 11, 24, 8, 8),
-    //     createdBy: "Шевцов Андрій Вікторович"
-    //   },
-    //   {
-    //     id:2,
-    //     title: "Гарні новини, друзі4!",
-    //     imageLink: "https://icf.listex.info/TMLogo/200x200/2acd590d-6b27d6e9.jpg",
-    //     text: "Сталося диво! Всі викладачі дали шари!",
-    //     link: "https://t.me/IASA_Student_Council/1446",
-    //     createdAt: new Date(2021, 11, 24, 14, 11),
-    //     createdBy: "Шевцов Андрій Вікторович"
-    //   },
-    //   {
-    //     id:3,
-    //     title: "Гарні новини, друзі3!",
-    //     imageLink: "https://icf.listex.info/TMLogo/200x200/2acd590d-6b27d6e9.jpg",
-    //     text: "Сталося диво! Всі викладачі дали шари!",
-    //     link: "https://t.me/IASA_Student_Council/1446",
-    //     createdAt: new Date(2021, 11, 24, 16, 23),
-    //     createdBy: "Шевцов Андрій Вікторович"
-    //   },
-    //   {
-    //     id:4,
-    //     title: "Гарні новини, друзі2!",
-    //     imageLink: "https://icf.listex.info/TMLogo/200x200/2acd590d-6b27d6e9.jpg",
-    //     text: "Сталося диво! Всі викладачі дали шари!",
-    //     link: "https://t.me/IASA_Student_Council/1446",
-    //     createdAt: new Date(2021, 11, 24, 19, 4),
-    //     createdBy: "Шевцов Андрій Вікторович"
-    //   },
-    // ]
-
     render() {
         return (
             <Container>

@@ -26,6 +26,8 @@ class LoginPage extends React.Component {
                 return response.json();
             }).then(data => {
                 console.log(data);
+                localStorage.setItem("access_token", data.access_token);
+                localStorage.setItem("refresh_token", data.refresh_token);
                 if(data.status != null && data.status >=400){
                     throw new Error();
                 }

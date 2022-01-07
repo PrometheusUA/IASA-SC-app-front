@@ -17,10 +17,16 @@ function Header(props){
                         <Nav.Link href="#about">Про нас</Nav.Link>
                         <Nav.Link href="#isic">ISIC</Nav.Link>
                         <Nav.Link href="/complaint">Поскаржитись</Nav.Link>
+                        <Nav.Link href="/video">IASAteka</Nav.Link>
                         <Nav.Link href="/">Новини</Nav.Link>
                         {localStorage.getItem("access_token") !== null? 
                         <>
                             <Nav.Link href="">Профіль</Nav.Link>
+                            <Nav.Link onClick={() => {
+                                localStorage.removeItem("access_token");
+                                localStorage.removeItem("refresh_token");
+                                window.location.reload();
+                                }}>Вихід</Nav.Link>
                         </>: 
                         <>
                             <Nav.Link href="/login">Логін</Nav.Link>
