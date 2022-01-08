@@ -6,6 +6,7 @@ import Container from 'react-bootstrap/esm/Container';
 import ReactPlayer from 'react-player'
 import Spinner from 'react-bootstrap/Spinner';
 import withRouter from '../../hooks/withRouter';
+import refreshToken from '../../hooks/refreshToken';
 
 class VideoPage extends React.Component {
     constructor(props) {
@@ -34,10 +35,21 @@ class VideoPage extends React.Component {
                     else
                         return response.text()
                 })
-                .then(data => {
-                    console.log(typeof data)
-                    if (typeof data == 'string')
-                        this.setState({ error: data, loaded:true })
+                .then(async data => {
+                    if (typeof data == 'string'){
+                        if(!data.startsWith("The Token has expired on"))
+                            this.setState({ error: data, loaded:true })
+                        else{
+                            try{
+                                await refreshToken();
+                                this.fetchById();
+                            }
+                            catch(error){
+                                this.setState({ error: "REFRESH: " + error.message, loaded: true })
+                                return;
+                            }
+                        }
+                    }
                     else
                         this.setState({ loaded:true, 
                             videoUrl: data.link, 

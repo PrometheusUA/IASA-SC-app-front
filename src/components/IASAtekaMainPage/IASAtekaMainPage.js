@@ -5,6 +5,7 @@ import Container from 'react-bootstrap/esm/Container';
 import Spinner from 'react-bootstrap/Spinner';
 import CardVideo from './CardVideo/CardVideo';
 import CardNewVideo from './CardNewVideo/CardNewVideo';
+import refreshToken from '../../hooks/refreshToken';
 
 class IASAtekaMainPage extends React.Component {
     constructor(props) {
@@ -25,10 +26,22 @@ class IASAtekaMainPage extends React.Component {
                 else
                     return response.text()
             })
-            .then(data => {
+            .then(async data => {
                 console.log(typeof data)
-                if (typeof data == 'string')
-                    this.setState({ error: data })
+                if (typeof data == 'string'){
+                if(!data.startsWith("The Token has expired on"))
+                    this.setState({ error: data });
+                else{
+                    try{
+                        await refreshToken();
+                        this.fetchVideos();
+                    }
+                    catch(error){
+                        this.setState({ error: "REFRESH: " + error.message });
+                        return;
+                    }
+                }
+                }
                 else
                     this.setState({ videos: data });
             }).catch(error => {

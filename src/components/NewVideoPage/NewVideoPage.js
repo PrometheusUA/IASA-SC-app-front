@@ -6,6 +6,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/esm/Container';
 import Spinner from 'react-bootstrap/Spinner';
+import refreshToken from '../../hooks/refreshToken';
 import './NewVideoPage.css';
 
 class NewVideoPage extends React.Component {
@@ -39,9 +40,60 @@ class NewVideoPage extends React.Component {
                     let text = await result.text();
                     return [text, result.ok];
                 })
-                .then(arr => {
+                .then(async arr => {
                     const text = arr[0];
                     const ok = arr[1];
+                    if (ok) {
+                        this.setState({ ok: true, processed: true });
+                    }
+                    else {
+                        if (text.startsWith("The Token has expired on")){
+                            try{
+                                await refreshToken();
+                                this.submitForm(event);
+                            }
+                            catch(error){
+                                this.setState({ errorMessage: "REFRESH: " + error.message, processed: true })
+                                return;
+                            }
+                        }
+                        else
+                            this.setState({ errorMessage: text, processed: true });
+                    }
+                })
+                .catch(error => {
+                    this.setState({ errorMessage: error.message, processed: true })
+                });
+        }
+
+        this.oneTrySubmitForm = (event) => {
+            event.preventDefault();
+
+            const formData = new FormData();
+            formData.append('file', this.state.selectedFile);
+            const authorToken = localStorage.getItem("access_token") != null ? "Bearer " + localStorage.getItem("access_token") : "";
+            formData.append('discipline', this.state.discipline);
+            formData.append('additionalInfo', this.state.additionalInfo);
+            formData.append('teacher', this.state.teacher);
+            this.setState({ processed: false, ok: false })
+
+            fetch('http://localhost:8081/video',
+                {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Authorization': authorToken
+                    }
+                }
+            )
+                .then(async (result) => {
+                    let text = await result.text();
+                    return [text, result.ok];
+                })
+                .then(async arr => {
+                    const text = arr[0];
+                    const ok = arr[1];
+                    console.log(text);
                     if (ok) {
                         this.setState({ ok: true, processed: true });
                     }
@@ -49,7 +101,7 @@ class NewVideoPage extends React.Component {
                         this.setState({ errorMessage: text, processed: true });
                     }
                 })
-                .catch((error) => {
+                .catch(error => {
                     this.setState({ errorMessage: error.message, processed: true })
                 });
         }
