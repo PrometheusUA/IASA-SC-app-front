@@ -9,6 +9,7 @@ import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import VideoPage from './components/VideoPage/VideoPage';
 import IASAtekaMainPage from './components/IASAtekaMainPage/IASAtekaMainPage';
+import NewVideoPage from './components/NewVideoPage/NewVideoPage';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import './App.css';
@@ -21,12 +22,14 @@ class App extends React.Component {
         <Header />
         <main className='default'>
           <Routes>
-            <Route path="/" element={<MainPage />}/>
-            <Route path="/news" element={<MainPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/complaint" element={<ComplaintPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/video" element={<IASAtekaMainPage />} />
+            <Route exact path="/news" element={<MainPage />} />
+            <Route exact path="/login" element={<LoginPage />} />
+            <Route exact path="/complaint" element={<ComplaintPage />} />
+            <Route exact path="/register" element={<RegisterPage />} />
+            <Route exact path="/video/new" element={<NewVideoPage />} />
+            <Route path="/video/:id" element={<VideoPage />} />
+            <Route exact path="/video" element={<IASAtekaMainPage />} />
+            <Route exact path="/" element={<MainPage />}/>
           </Routes>
         </main>
         <Footer />

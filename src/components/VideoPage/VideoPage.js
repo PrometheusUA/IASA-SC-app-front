@@ -2,95 +2,95 @@ import React from 'react';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/esm/Container';
 import ReactPlayer from 'react-player'
-
+import Spinner from 'react-bootstrap/Spinner';
+import withRouter from '../../hooks/withRouter';
 
 class VideoPage extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { selectedFile: null, isFilePicked: false, additionalInfo: "", discipline: "", teacher: "", errorMessage: "" };
-        this.changeHandler = (event) => {
-            this.setState({ selectedFile: event.target.files[0], isFilePicked: true });
-        }
-        this.submitForm = (event) => {
-            event.preventDefault();
+        this.state = {error: null, loaded:false, videoUrl: null, teacher: null, discipline: null, additionalInfo: null, createdAt: null, createdBy: null};
 
-            const formData = new FormData();
-            formData.append('file', this.state.selectedFile);
-            const authorToken = localStorage.getItem("access_token") != null ? "Bearer " + localStorage.getItem("access_token") : "";
-            formData.append('discipline', this.state.discipline);
-            formData.append('additionalInfo', this.state.additionalInfo);
-            formData.append('teacher', this.state.teacher);
+        this.fetchById = () => {
+            const id = props.params.id;
+            if(id == null || id === '' || parseInt(id).toString() !== id || parseInt(id) < 0 ){
+                this.setState({ error: "Неправильний шлях: id не є цілим числом або не існує!", loaded:true });
+            }
+            else if (localStorage.getItem("access_token") == null){
+                this.setState({ error: "Ви не залогінені: у доступу до IASAтеки відмовлено!", loaded:true });
+            }
+            else{
+                const authorToken = localStorage.getItem("access_token") != null ? "Bearer " + localStorage.getItem("access_token") : "";
 
-            fetch('http://localhost:8081/video',
-                {
-                    method: 'POST',
-                    body: formData,
+                fetch('http://localhost:8081/video/' + id, {
+                    method: 'GET',
                     headers: {
                         'Authorization': authorToken
                     }
-                }
-            )
-                .then((result) => {
-                    console.log('Success:', result);
+                }).then(response => {
+                    if (response.ok)
+                        return response.json();
+                    else
+                        return response.text()
                 })
-                .catch((error) => {
-                    console.error('Error:', error);
+                .then(data => {
+                    console.log(typeof data)
+                    if (typeof data == 'string')
+                        this.setState({ error: data, loaded:true })
+                    else
+                        this.setState({ loaded:true, 
+                            videoUrl: data.link, 
+                            teacher: data.teacher, 
+                            discipline: data.discipline, 
+                            additionalInfo: data.additionalInfo,
+                            createdBy: data.createdBy,
+                            createdAt: new Date(data.createdAt) });
+                }).catch(error => {
+                    console.log(error);
                 });
+            }
         }
+    }
+
+    componentDidMount(){
+        this.fetchById();
     }
 
     render() {
         return (
             <Container>
-                <Col className="justify-content-center">
-                    <Row className="justify-content-center">
-                        <ReactPlayer url="http://localhost:8081/video/sample2" controls={true} width="80%" height="80%"
-                            config={{
-                                youtube: {
-                                    showinfo: 1
-                                }
-                            }} />
-                        {/* <video controls>
-                            <source src="http://localhost:8081/video/sample2" type="video/mp4"/>
-                        </video> */}
-                    </Row>
-                    <Row className="justify-content-center">
-                        <Form className="form" onSubmit={this.submitForm}>
-                            <Form.Group controlId="teacher">
-                                <Form.Label>ПІБ викдадача</Form.Label>
-                                <Form.Control type="text" placeholder="Введіть ПІБ викладача" value={this.state.teacher} onChange={(e) => this.setState({ teacher: e.target.value, errorMessage: "" })} />
-                            </Form.Group>
-                            <Form.Group controlId="discipline">
-                                <Form.Label>Дисципліна</Form.Label>
-                                <Form.Control type="text" placeholder="Введіть назву дисципліни" value={this.state.discipline} onChange={(e) => this.setState({ discipline: e.target.value, errorMessage: "" })} />
-                            </Form.Group>
-                            <Form.Group controlId="additionalInfo">
-                                <Form.Label>Детальніше про відео</Form.Label>
-                                <Form.Control type="text" placeholder="Введіть інформацію про відео" value={this.state.additionalInfo} onChange={(e) => this.setState({ additionalInfo: e.target.value, errorMessage: "" })} />
-                            </Form.Group>
-                            <Form.Group controlId="file">
-                                <Form.Label>Відеофайл (.mp4)</Form.Label>
-                                <Form.Control type="file" accept=".mp4" onChange={this.changeHandler} />
-                            </Form.Group>
-                            <p className='error-message'>{this.state.errorMessage}</p>
-                            <Button variant="primary" type="submit" disabled={!this.state.isFilePicked}>
-                                Відправити
-                            </Button>
-                        </Form>
-                        {/* <input type="file" name="file" onChange={this.changeHandler} />
-                        <div className="form-group mt-3">
-                            <button type="submit" className="btn btn-primary" onClick={this.submitForm}>Submit</button>
-                        </div> */}
-                    </Row>
-                </Col>
+                {this.state.loaded ? 
+                    this.state.error == null ?
+                        <Col className="justify-content-center">
+                            <Row>
+                                <h1>Запис від {this.state.teacher}</h1>
+                            </Row>
+                            <Row>
+                                <h3>Дисципліна: {this.state.discipline}</h3>
+                                <h3>Викладено {this.state.createdBy}, {this.state.createdAt.getHours()}:{this.state.createdAt.getMinutes()} {this.state.createdAt.getDate()}.{this.state.createdAt.getMonth() + 1}.{this.state.createdAt.getFullYear()}</h3>
+                            </Row>
+                            <Row>
+                                <h4>Про відео: </h4>
+                            </Row>
+                            <Row>
+                                <p>{this.state.additionalInfo}</p>
+                            </Row>
+                            <Row>
+                                <h4>Власне відео: </h4>
+                            </Row>
+                            <Row className="justify-content-center">
+                                <ReactPlayer url={this.state.videoUrl} controls={true} width="80%" height="80%"
+                                    config={{
+                                        youtube: {
+                                            showinfo: 1
+                                        }
+                                    }} />
+                            </Row>
+                        </Col> : <p className='error-message'> {this.state.error}</p> : <Spinner animation="border" />}
             </Container>
-
         );
     }
 }
 
-export default VideoPage;
+export default withRouter(VideoPage);

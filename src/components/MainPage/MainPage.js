@@ -44,6 +44,7 @@ class MainPage extends React.Component {
     render() {
         return (
             <Container>
+                <h1>Новини ІПСА</h1>
                 <Row xs={1} md={2} lg={4} className="justify-content-center">
                     {!this.state.loading ?
                         this.state.newsCount <= 0 ? <h1>Відсутні будь-які новини(</h1> :

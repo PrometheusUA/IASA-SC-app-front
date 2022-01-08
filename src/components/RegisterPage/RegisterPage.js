@@ -5,9 +5,9 @@ import Col from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/esm/Container';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import { Navigate } from 'react-router-dom';
 
-
-import './RegisterPage.css'
+import './RegisterPage.css';
 
 
 class RegisterPage extends React.Component {
@@ -39,7 +39,7 @@ class RegisterPage extends React.Component {
                 }
                 localStorage.setItem("access_token", data.access_token);
                 localStorage.setItem("refresh_token", data.refresh_token);
-                // this.props.history.push('/news');
+                window.location.reload();
             }).catch(() => {
                 this.setState({errorMessage: "Користувач вже існує, або Ви неправильно ввели дані!"});
             });
@@ -47,6 +47,7 @@ class RegisterPage extends React.Component {
     }
 
     render() {
+        if(localStorage.getItem("access_token") == null)
         return (
             <Container>
                 <Row>
@@ -86,6 +87,10 @@ class RegisterPage extends React.Component {
             </Container>
 
         );
+        else return(
+            <Navigate to="/" />
+        );
+
     }
 }
 

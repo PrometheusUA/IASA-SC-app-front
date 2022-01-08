@@ -4,11 +4,12 @@ import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/esm/Container';
 import Spinner from 'react-bootstrap/Spinner';
 import CardVideo from './CardVideo/CardVideo';
+import CardNewVideo from './CardNewVideo/CardNewVideo';
 
 class IASAtekaMainPage extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { videos: null };
+        this.state = { videos: null, error: null };
 
         this.fetchVideos = () => {
             const authorToken = localStorage.getItem("access_token") != null ? "Bearer " + localStorage.getItem("access_token") : "";
@@ -18,10 +19,18 @@ class IASAtekaMainPage extends React.Component {
                 headers: {
                     'Authorization': authorToken
                 }
-            }).then(response => response.json())
+            }).then(response => {
+                if (response.ok)
+                    return response.json();
+                else
+                    return response.text()
+            })
             .then(data => {
-                console.log(data);
-                this.setState({ videos: data });
+                console.log(typeof data)
+                if (typeof data == 'string')
+                    this.setState({ error: data })
+                else
+                    this.setState({ videos: data });
             }).catch(error => {
                 console.log(error);
             });
@@ -35,10 +44,13 @@ class IASAtekaMainPage extends React.Component {
     render() {
         return (
             <Container>
+                <h1>Відеозаписи дисциплін ІПСА</h1>
                 <Row xs={1} md={2} lg={4} className="justify-content-center">
                     {this.state.videos !== null ?
                         this.state.videos.length <= 0 ? <h1>Відсутні будь-які відео(</h1> :
-                            this.state.videos.map(video => {
+                            <>
+                            <CardNewVideo />
+                            {this.state.videos.map(video => {
                                 return <CardVideo
                                     key={"videoCard" + video.id}
                                     teacher={video.teacher}
@@ -47,7 +59,9 @@ class IASAtekaMainPage extends React.Component {
                                     additionalInfo={video.additionalInfo}
                                     createdAt={video.createdAt}
                                     createdBy={video.createdBy} />
-                            }) : <Spinner animation="border" />
+                            })}</> : this.state.error == null?
+                             <Spinner animation="border" /> :
+                             <p className='error-message'>{this.state.error}</p>
                         }
                 </Row>
             </Container>
